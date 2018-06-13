@@ -13,8 +13,8 @@ loadEventListeners();
 function loadEventListeners(){
   form.addEventListener('submit', addTask); // Add Task event
   taskList.addEventListener('click', removeTask) // Removes Task event
-  // clearBtn.addEventListener('click', clearTasks);
-  // filter.addEventListener('change', filterTasks)
+  clearBtn.addEventListener('click', clearTasks); // Removes all tasks
+  filter.addEventListener('keyup', filterTasks)
 }
 
 function addTask(e){
@@ -52,4 +52,25 @@ function removeTask(e){
       e.target.parentElement.parentElement.remove()
     }
   }
+}
+
+function clearTasks(){
+  // taskList.innerHTML = ''; // it is Slower
+
+  // Faster ==>> https://jsperf.com/innerhtml-vs-removechild
+  while(taskList.firstChild){
+    taskList.removeChild(taskList.firstChild)
+  }
+}
+
+function filterTasks(e){
+  const text = e.target.value.toLowerCase();
+  document.querySelectorAll('.collection-item').forEach(task => {
+    const item = task.firstChild.textContent;
+    if(item.toLowerCase().indexOf(text) !== -1){
+      task.style.display = 'block'
+    } else {
+      task.style.display = 'none'
+    }
+  })
 }
